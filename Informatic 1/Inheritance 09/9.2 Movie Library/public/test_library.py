@@ -27,6 +27,63 @@ class LibraryTest(TestCase):
         l.add_movie(d)
         self.assertEqual(413, l.get_total_duration())
 
+    def test_eq(self):
+        a = Movie("The Shawshank Redemption", ["Robbins", "Freeman"], 142)
+        b = Movie("The Godfather", ["Brando", "Pacino"], 175)
+        self.assertFalse(a == b)
+
+    def test_eq2(self):
+        a = Movie("The Shawshank Redemption", ["Robbins", "Freeman"], 142)
+        b = Movie("The Shawshank Redemption", ["Robbins", "Freeman"], 142)
+        self.assertTrue(a == b)
+
+    def test_eq_moviebox(self):
+        a = Movie("The Shawshank Redemption", ["Robbins", "Freeman"], 142)
+        b = Movie("The Godfather", ["Brando", "Pacino"], 175)
+        c = Movie("12 Angry Men", ["Fonda", "Cobb"], 96)
+        e = MovieBox("Top Movies2", [a, c])
+        f = MovieBox("Top Movies2", [a, c])
+        self.assertTrue(e == f)
+
+    def test_eq_moviebox2(self):
+        a = Movie("The Shawshank Redemption", ["Robbins", "Freeman"], 142)
+        b = Movie("The Godfather", ["Brando", "Pacino"], 175)
+        c = Movie("12 Angry Men", ["Fonda", "Cobb"], 96)
+        d = MovieBox("Top Movies", [b, c])
+        e = MovieBox("Top Movies2", [a, c])
+        self.assertFalse(d == e)
+
+    def test_movie_init_title(self):
+        with self.assertRaises(Warning):
+            a = Movie("", ["Robbins", "Freeman"], 142)
+
+    def test_movie_init_actors(self):
+        with self.assertRaises(Warning):
+            a = Movie("asdf", [], 142)
+
+    def test_movie_init_duration(self):
+        with self.assertRaises(Warning):
+            a = Movie("asdf", ["Robbins", "Freeman"], "142")
+
+    def test_moviebox_init_title(self):
+        with self.assertRaises(Warning):
+            a = Movie("The Shawshank Redemption", ["Robbins", "Freeman"], 142)
+            c = Movie("12 Angry Men", ["Fonda", "Cobb"], 96)
+            e = MovieBox("", [a, c])
+
+    def test_moviebox_init_movies(self):
+        with self.assertRaises(Warning):
+            a = Movie("The Shawshank Redemption", ["Robbins", "Freeman"], 142)
+            c = "moin"
+            e = MovieBox("asdf", [a, c])
+
+    def test_eq_moviebox(self):
+        a = Movie("The Shawshank Redemption", ["Robbins", "Freeman"], 142)
+        c = Movie("12 Angry Men", ["Fonda", "Cobb", "Robbins", "Freeman"], 96)
+        e = MovieBox("Top Movies", [a, c])
+        actual = e.get_actors()
+        expected = ["Cobb", "Fonda", "Freeman", "Robbins"]
+        self.assertEqual(expected, actual)
     # This current test suite only contains very basic test cases. By now,
     # you have some experience in writing test cases. We strongly encourage
     # you to implement further test cases. The additional tests can be run via
