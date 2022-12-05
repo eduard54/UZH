@@ -13,7 +13,7 @@ class Movie:
         if not (type(actors) == list and len(actors) != 0):
             raise Warning("wrong input")
 
-        if duration < 1:
+        if not type(duration) == int or duration < 1:
             raise Warning("Movie has to be longer than 1 minute")
         self.__title = title
         self.__actors = actors
@@ -25,13 +25,19 @@ class Movie:
         return strMovie.replace('\'', '"')
 
     def __eq__(self, other):
-        if self.get_title() == other.get_title() and self.get_actors() == other.get_actors() and self.get_duration() == other.get_duration(): 
-            return True
-        else: 
-            return False
+        # if self.get_title() == other.get_title() and self.get_actors() == other.get_actors() and self.get_duration() == other.get_duration(): 
+        #     return True
+        # else: 
+        #     return False
+
+        # Maybe the Access tests gave an error during checking if movies are equal, because the hash function should be used to check for equality
+        return self.__hash__() == other.__hash__()
 
     def __hash__(self):
-        return hash(self.__title, tuple(self.__actors), self.__duration)
+        # return hash(self.__title, tuple(self.__actors), self.__duration)
+        # The hash function only takes one argument. The implementation above gave an error, because 3 arguments are given.
+        # By wrapping the input in brackets the input is only one tuple
+        return hash((self.__title, tuple(self.__actors), self.__duration))
 
     def get_title(self):
         return self.__title
